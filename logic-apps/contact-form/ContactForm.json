@@ -325,6 +325,19 @@
                             }
                         },
                         "case": "Sonstiges"
+                    },
+                    "Case_5": {
+                        "actions": {
+                            "Set_variable_5_switch": {
+                                "inputs": {
+                                    "name": "subject-text",
+                                    "value": "Ich interessiere mich für Trauerbegleitung"
+                                },
+                                "runAfter": {},
+                                "type": "SetVariable"
+                            }
+                        },
+                        "case": "Trauerbegleitung"
                     }
                 },
                 "default": {
