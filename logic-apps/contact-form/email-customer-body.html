@@ -1,0 +1,24 @@
+<p>Sehr @{if(equals(variables('salutation'),''), 'geehrte(r)', if(equals(variables('salutation'),'Herr'), 'geehrter ', 'geehrte '))}    
+    @{variables('salutation')} @{variables('name')},<br>
+    
+    vielen Dank für Ihr Interesse an unserem
+    Unternehmen. Sie haben uns die folgende Nachricht über das Kontaktformular auf unserer Website
+    www.trauerhilfe-lohel.de
+    geschrieben:
+    
+    <div style="padding: 1rem; font-style: italic; color: gray">
+        <p>
+            <strong>@{variables('subject')}</strong>
+        </p>
+        <p>
+            @{variables('message')}    
+        </p>
+    </div>
+
+    @{if(variables('isUrgent'), '<p>Wir setzen uns schnellstmöglich mit Ihnen in Verbindung.</p>')}
+
+    <p>
+        Mit freundlichen Grüßen<br>
+        Die Trauerhilfe Lohel
+    </p>
+</p>
