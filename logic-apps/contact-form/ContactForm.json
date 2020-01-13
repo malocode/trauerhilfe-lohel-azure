@@ -1,0 +1,379 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Condition": {
+                "actions": {
+                    "Set_variable_5": {
+                        "inputs": {
+                            "name": "phone",
+                            "value": "@{replace(replace(replace(trim(variables('phone-raw')),' ',''),'-',''),'/','')}"
+                        },
+                        "runAfter": {},
+                        "type": "SetVariable"
+                    }
+                },
+                "expression": {
+                    "and": [
+                        {
+                            "equals": [
+                                "@variables('has-phone')",
+                                true
+                            ]
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_11": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "If"
+            },
+            "Initialize_variable": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "value": "@{triggerFormDataValue('name')}"
+                        }
+                    ]
+                },
+                "runAfter": {},
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_10": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "phone",
+                            "type": "string",
+                            "value": "@variables('phone-raw')"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_9": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_11": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "salutation",
+                            "type": "string",
+                            "value": "@{triggerFormDataValue('salutation')}"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_10": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_2": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "subject",
+                            "type": "string",
+                            "value": "@{triggerFormDataValue('subject')}"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_3": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "email",
+                            "type": "string",
+                            "value": "@{triggerFormDataValue('email')}"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_4": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "message",
+                            "type": "string",
+                            "value": "@join(split(triggerFormDataValue('message'),'\n'),'<br>')"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_3": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_5": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "phone-raw",
+                            "type": "string",
+                            "value": "@triggerFormDataValue('phone')"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_4": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_6": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "callback",
+                            "type": "boolean",
+                            "value": "@equals(triggerFormDataValue('callback'),'on')"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_5": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_7": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "subject-text",
+                            "type": "string",
+                            "value": "\"\""
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_6": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_8": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "isUrgent",
+                            "type": "boolean",
+                            "value": "@or(equals(variables('subject'),'Trauerfall'),variables('callback'))"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_7": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_9": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "has-phone",
+                            "type": "boolean",
+                            "value": "@not(equals(length(variables('phone-raw')),0))"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_8": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Response": {
+                "inputs": {
+                    "statusCode": 200
+                },
+                "kind": "Http",
+                "runAfter": {
+                    "Send_an_email_(V2)_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Response"
+            },
+            "Send_an_email_(V2)": {
+                "inputs": {
+                    "body": {
+                        "Body": "<p><div style=\"display: @{if(variables('isUrgent'),'block', 'none')}; padding:1rem; width:100%; background-color: red; color: rgb(255,255,255);\"> <strong>@{if(variables('isUrgent'),'DRINGEND', '')}</strong></div><div style=\"display: @{if(variables('callback'),'block', 'none')}; margin: 1rem 0rem; width:100%; background-color: white; color: rgb(255,0,0);\"> @{if(variables('callback'),'Bittet um schnellstmöglichen R&uumlckruf!', '')}</div><div style=\"width: 100%; clear:both; background-color: transparent; padding-top: 0.5rem\"><div style=\"float: left; min-width: 4rem; width: 4rem;\"> <span style=\"color:gray; font-weight: bold; font-size: smaller;\">NAME</span></div><div style=\"float: left; min-width: 8rem; calc(100% - 4rem); \"> @{variables('name')}</div></div><div style=\"width: 100%; clear:both; background-color: transparent; padding-top: 0.5rem; \"><div style=\"float: left; min-width: 4rem; width: 4rem;\"> <span style=\"color:gray; font-weight: bold; font-size: smaller;\">EMAIL</span></div><div style=\"float: left; min-width: 8rem; width: calc(100% - 4rem);\"> <a href=\"mailto:@{variables('email')}\">@{variables('email')}</a></div></div><div style=\"width: 100%; clear:both; background-color: transparent; padding-top: 0.5rem\"><div style=\"float: left; min-width: 4rem; width: 4rem;\"> <span style=\"color:gray; font-weight: bold; font-size: smaller;\">TELEFON</span></div><div style=\"float: left; min-width: 8rem; width: calc(100% - 4rem);\"> <span style=\"display: @{if(variables('has-phone'),'inline','none')}; \"> <a href=\"tel:@{variables('phone')}\">@{variables('phone')}</a> </span> <span style=\"display: @{if(variables('has-phone'),'none','inline')};\"> Nicht angegeben </span></div></div><div style=\"width:100%; padding-top: 2rem; padding-bottom: 1rem;\"><p><strong>@{variables('subject-text')}</strong></p><p>@{variables('message')}</p></div><footer style=\"font-size: smaller\"><hr><p>Diese Nachricht wurde über das Kontaktformular versendet.</p><p><strong>Bitte nicht mit der Antwortfunktion antworten!</strong><p> <a href=\"http://www.trauerhilfe-lohel.de\">www.trauerhilfe-lohel.de</a></p> </footer></p>",
+                        "From": "kontaktformular@trauerhilfe-lohel.de",
+                        "Importance": "@{if (or(equals(variables('subject'),'Trauerfall'),variables('isUrgent')),'High','Normal')}",
+                        "Subject": "[@{variables('subject')}] @{variables('name')}",
+                        "To": "daniela.lohel@trauerhilfe-lohel.de"
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['office365']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/v2/Mail"
+                },
+                "runAfter": {
+                    "Switch": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Send_an_email_(V2)_2": {
+                "inputs": {
+                    "body": {
+                        "Body": "<p>Sehr @{if(equals(variables('salutation'),''), 'geehrte(r)', if(equals(variables('salutation'),'Herr'), 'geehrter ', 'geehrte '))} @{variables('salutation')} @{variables('name')},<br> vielen Dank für Ihr Interesse an unserem Unternehmen. Sie haben uns die folgende Nachricht über das Kontaktformular auf unserer Website www.trauerhilfe-lohel.de geschrieben:<div style=\"border-left: solid 4px lightgray; padding-left: 1rem; font-style: italic;\"><p> <strong>@{variables('subject-text')}</strong></p><p> @{variables('message')}</p></div>@{if(variables('isUrgent'), '<p>Wir setzen uns schnellstmöglich mit Ihnen in Verbindung.</p>','')}<p> Mit freundlichen Grüßen<br> Die Trauerhilfe Lohel</p></p>",
+                        "From": "noreply@trauerhilfe-lohel.de",
+                        "Subject": "Vielen Dank für Ihre Nachricht an die Trauerhilfe Lohel",
+                        "To": "@variables('email')"
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['office365']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/v2/Mail"
+                },
+                "runAfter": {
+                    "Send_an_email_(V2)": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Switch": {
+                "cases": {
+                    "Case": {
+                        "actions": {
+                            "Set_variable": {
+                                "inputs": {
+                                    "name": "subject-text",
+                                    "value": "Ich habe eine Frage"
+                                },
+                                "runAfter": {},
+                                "type": "SetVariable"
+                            }
+                        },
+                        "case": "Frage"
+                    },
+                    "Case_2": {
+                        "actions": {
+                            "Set_variable_2": {
+                                "inputs": {
+                                    "name": "subject-text",
+                                    "value": "Ich habe einen Trauerfall"
+                                },
+                                "runAfter": {},
+                                "type": "SetVariable"
+                            }
+                        },
+                        "case": "Trauerfall"
+                    },
+                    "Case_3": {
+                        "actions": {
+                            "Set_variable_3": {
+                                "inputs": {
+                                    "name": "subject-text",
+                                    "value": "Ich möchte einen Termin zur Bestattungsvorsorge vereinbaren"
+                                },
+                                "runAfter": {},
+                                "type": "SetVariable"
+                            }
+                        },
+                        "case": "Vorsorge"
+                    },
+                    "Case_4": {
+                        "actions": {
+                            "Set_variable_4": {
+                                "inputs": {
+                                    "name": "subject-text",
+                                    "value": "Ich habe ein allgemeines Anliegen"
+                                },
+                                "runAfter": {},
+                                "type": "SetVariable"
+                            }
+                        },
+                        "case": "Sonstiges"
+                    }
+                },
+                "default": {
+                    "actions": {}
+                },
+                "expression": "@variables('subject')",
+                "runAfter": {
+                    "Condition": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Switch"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "manual": {
+                "conditions": [],
+                "inputs": {
+                    "schema": {}
+                },
+                "kind": "Http",
+                "runtimeConfiguration": {
+                    "secureData": {
+                        "properties": [
+                            "outputs"
+                        ]
+                    }
+                },
+                "type": "Request"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {
+                "office365": {
+                    "connectionId": "/subscriptions/90742827-74fc-4204-848a-578d3403d81e/resourceGroups/dev-tl-rg/providers/Microsoft.Web/connections/office365",
+                    "connectionName": "office365",
+                    "id": "/subscriptions/90742827-74fc-4204-848a-578d3403d81e/providers/Microsoft.Web/locations/westeurope/managedApis/office365"
+                }
+            }
+        }
+    }
+}
