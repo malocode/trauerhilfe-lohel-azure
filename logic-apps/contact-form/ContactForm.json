@@ -252,14 +252,14 @@
             "Send_an_email_(V2)_2": {
                 "inputs": {
                     "body": {
-                        "Body": "<p>Sehr @{if(equals(variables('salutation'),''), 'geehrte(r)', if(equals(variables('salutation'),'Herr'), 'geehrter ', 'geehrte '))} @{variables('salutation')} @{variables('name')},<br> vielen Dank für Ihr Interesse an unserem Unternehmen. Sie haben uns die folgende Nachricht über das Kontaktformular auf unserer Website www.trauerhilfe-lohel.de geschrieben:<div style=\"border-left: solid 4px lightgray; padding-left: 1rem; font-style: italic;\"><p> <strong>@{variables('subject-text')}</strong></p><p> @{variables('message')}</p></div>@{if(variables('isUrgent'), '<p>Wir setzen uns schnellstmöglich mit Ihnen in Verbindung.</p>','')}<p> Mit freundlichen Grüßen<br> Die Trauerhilfe Lohel</p></p>",
-                        "From": "noreply@trauerhilfe-lohel.de",
+                        "Body": "<p>@{if(variables('isUrgent'), '<p>Wir setzen uns schnellstmöglich mit Ihnen in Verbindung.</p>','')}</p>\n<p>Sehr @{if(equals(variables('salutation'),''), 'geehrte(r)', if(equals(variables('salutation'),'Herr'), 'geehrter ', 'geehrte '))} @{variables('salutation')} @{variables('name')},<br>\n<br>\nvielen Dank für Ihr Interesse an unserem Unternehmen. Sie haben uns die folgende Nachricht über das Kontaktformular auf unserer Website www.trauerhilfe-lohel.de geschrieben:</p>\n<p><strong></strong><strong>@{variables('subject-text')}</strong><strong></strong></p>\n<p>@{variables('message')}</p>\n<p>Mit freundlichen Grüßen<br>\n<br>\nDie Trauerhilfe Lohel</p>",
+                        "From": "no-reply@trauerhilfe-lohel.de",
                         "Subject": "Vielen Dank für Ihre Nachricht an die Trauerhilfe Lohel",
-                        "To": "@variables('email')"
+                        "To": "@{variables('email')}; no-reply@trauerhilfe-lohel.de"
                     },
                     "host": {
                         "connection": {
-                            "name": "@parameters('$connections')['office365']['connectionId']"
+                            "name": "@parameters('$connections')['office365_1']['connectionId']"
                         }
                     },
                     "method": "post",
@@ -384,6 +384,11 @@
                 "office365": {
                     "connectionId": "/subscriptions/90742827-74fc-4204-848a-578d3403d81e/resourceGroups/dev-tl-rg/providers/Microsoft.Web/connections/office365",
                     "connectionName": "office365",
+                    "id": "/subscriptions/90742827-74fc-4204-848a-578d3403d81e/providers/Microsoft.Web/locations/westeurope/managedApis/office365"
+                },
+                "office365_1": {
+                    "connectionId": "/subscriptions/90742827-74fc-4204-848a-578d3403d81e/resourceGroups/dev-tl-rg/providers/Microsoft.Web/connections/office365-1",
+                    "connectionName": "office365-1",
                     "id": "/subscriptions/90742827-74fc-4204-848a-578d3403d81e/providers/Microsoft.Web/locations/westeurope/managedApis/office365"
                 }
             }
