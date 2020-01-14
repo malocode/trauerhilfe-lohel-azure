@@ -252,10 +252,11 @@
             "Send_an_email_(V2)_2": {
                 "inputs": {
                     "body": {
+                        "Bcc": "no-reply@trauerhilfe-lohel.de",
                         "Body": "<p>@{if(variables('isUrgent'), '<p>Wir setzen uns schnellstmöglich mit Ihnen in Verbindung.</p>','')}</p>\n<p>Sehr @{if(equals(variables('salutation'),''), 'geehrte(r)', if(equals(variables('salutation'),'Herr'), 'geehrter ', 'geehrte '))} @{variables('salutation')} @{variables('name')},<br>\n<br>\nvielen Dank für Ihr Interesse an unserem Unternehmen. Sie haben uns die folgende Nachricht über das Kontaktformular auf unserer Website www.trauerhilfe-lohel.de geschrieben:</p>\n<p><strong></strong><strong>@{variables('subject-text')}</strong><strong></strong></p>\n<p>@{variables('message')}</p>\n<p>Mit freundlichen Grüßen<br>\n<br>\nDie Trauerhilfe Lohel</p>",
                         "From": "no-reply@trauerhilfe-lohel.de",
                         "Subject": "Vielen Dank für Ihre Nachricht an die Trauerhilfe Lohel",
-                        "To": "@{variables('email')}; no-reply@trauerhilfe-lohel.de"
+                        "To": "@variables('email')"
                     },
                     "host": {
                         "connection": {
